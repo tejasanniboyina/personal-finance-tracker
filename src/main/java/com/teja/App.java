@@ -19,7 +19,8 @@ public class App {
             System.out.println("3.Delete Expense");
             System.out.println("4.Total Expenses");
             System.out.println("5.Search Category");
-            System.out.println("6.Exit");
+            System.out.println("6.Update Expense");
+            System.out.println("7.Exit");
 
             int option = scanner.nextInt();
 
@@ -62,6 +63,13 @@ public class App {
                     }
                     break;
                 case 6:
+                    if(manager.updateExpense(getUpdatedExpenses())){
+                        System.out.println("Updated successfully!");
+                    }else{
+                        System.out.println("ID not found...");
+                    }
+
+                case 7:
                     System.out.println("Thanks for using Personal Finance Tracker!!");
                     return;
                 default:
@@ -95,5 +103,32 @@ public class App {
         Expense expense = new Expense(id, amount, category, description, date);
 
         return expense;
+    }
+
+
+    //case 6 : new values to update expense
+    static Expense getUpdatedExpenses(){
+        System.out.println("Enter ID of the expense to be updated.");
+        int updateId = scanner.nextInt();
+
+        System.out.print("Enter Amount:   ");
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+
+        System.out.print("Enter Category:   ");
+        String category = scanner.nextLine();
+
+        System.out.print("Enter Description:  ");
+        String description = scanner.nextLine();
+
+        System.out.print("Enter Date (YYYY-MM-DD):  ");
+        String dateInput = scanner.nextLine();
+        LocalDate date = LocalDate.parse(dateInput);
+
+        Expense expense = new Expense(updateId, amount, category, description, date);
+
+        return expense;
+
+
     }
 }

@@ -53,4 +53,18 @@ public class ExpenseManager {
         }
         return matchingExpenses;
     }
+
+    boolean updateExpense(Expense updatedExpense){
+        for(Expense expense:expensesList){
+            if(updatedExpense.getId()==expense.getId()){
+                expense.setAmount(updatedExpense.getAmount());
+                expense.setCategory(updatedExpense.getCategory());
+                expense.setDescription(updatedExpense.getDescription());
+                expense.setDate(updatedExpense.getDate());
+                return true;
+            }
+
+        }
+        return false;
+    }
 }
