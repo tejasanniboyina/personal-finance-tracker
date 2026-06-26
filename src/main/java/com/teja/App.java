@@ -88,18 +88,49 @@ public class App {
 
 
         System.out.print("Enter Amount:   ");
-        double amount = scanner.nextDouble();
+        double amount =0;
+        while(true){
+             amount = scanner.nextDouble();
+            if(amount <= 0){
+                System.out.println("Invalid amount! Amount must be greater than 0.");
+                System.out.print("Enter Amount:   ");
+                continue;
+            }
+            break;
+        }
         scanner.nextLine();
 
         System.out.print("Enter Category:   ");
-        String category = scanner.nextLine();
+        String category = "";
+        while(true){
+            category = scanner.nextLine();
+            if(category.trim().isEmpty()){
+                System.out.println("Category cannot be Empty");
+                System.out.print("Enter Category: ");
+                continue;
+            } break;
+        }
 
         System.out.print("Enter Description:  ");
         String description = scanner.nextLine();
 
         System.out.print("Enter Date (YYYY-MM-DD):  ");
-        String dateInput = scanner.nextLine();
-        LocalDate date = LocalDate.parse(dateInput);
+        String dateInput = "";
+        LocalDate date;
+        while(true){
+            try{
+                dateInput =  scanner.nextLine();
+                 date = LocalDate.parse(dateInput);
+
+            }catch(Exception e ){
+                System.out.println("Invalid Date Format, Please use correct Format! ");
+                System.out.print("Enter Date (YYYY-MM-DD):  ");
+                continue;
+            }
+
+            break;
+
+        }
 
         Expense expense = new Expense( amount, category, description, date);
 
