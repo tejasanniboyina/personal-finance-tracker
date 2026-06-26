@@ -83,8 +83,9 @@ public class App {
 
     //for case 1:
     static Expense enterExpenses() {
-        System.out.print("Enter ID:   ");
-        int id = scanner.nextInt();
+//        System.out.print("Enter ID:   ");
+//        int id = scanner.nextInt();
+
 
         System.out.print("Enter Amount:   ");
         double amount = scanner.nextDouble();
@@ -100,7 +101,7 @@ public class App {
         String dateInput = scanner.nextLine();
         LocalDate date = LocalDate.parse(dateInput);
 
-        Expense expense = new Expense(id, amount, category, description, date);
+        Expense expense = new Expense( amount, category, description, date);
 
         return expense;
     }

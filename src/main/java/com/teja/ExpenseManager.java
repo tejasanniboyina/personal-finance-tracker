@@ -7,7 +7,12 @@ public class ExpenseManager {
 
     private List<Expense> expensesList = new ArrayList<>();
 
+    private int nextId  = 1;
+
+    //ADD EXPENSE
     void addExpense(Expense expense) {
+        expense.setId(nextId);
+        nextId++;
         expensesList.add(expense);
 
     }

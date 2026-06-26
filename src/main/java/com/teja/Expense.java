@@ -60,6 +60,15 @@ public class Expense {
         this.date = date;
     }
 
+    //CONSTRUCTOR FOR AUTO ID'S
+
+
+    public Expense(double amount, String description, String category, LocalDate date) {
+        this.amount = amount;
+        this.description = description;
+        this.category = category;
+        this.date = date;
+    }
 
     //TO STRING METHOD
     @Override
