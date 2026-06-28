@@ -14,17 +14,23 @@ public class ExpenseManager {
     private int nextId  = 1;
 
     //ADD EXPENSE
-    void addExpense(Expense expense) throws SQLException {
+    void addExpense(Expense expense) {
+
         String sql = "INSERT INTO expenses(amount,category,description,date) values(?,?,?,?)";
 
-        PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
+        try (
+                Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
+        ) {
+            statement.setDouble(1, expense.getAmount());
+            statement.setString(2, expense.getCategory());
+            statement.setString(3, expense.getDescription());
+            statement.setDate(4, Date.valueOf(expense.getDate()));
 
-        statement.setDouble(1,expense.getAmount());
-        statement.setString(2,expense.getCategory());
-        statement.setString(3,expense.getDescription());
-        statement.setDate(4, Date.valueOf(expense.getDate()));
-
-        statement.executeUpdate();
+            statement.executeUpdate();
+        } catch(SQLException e){
+        e.printStackTrace();
+        }
 
     }
 
