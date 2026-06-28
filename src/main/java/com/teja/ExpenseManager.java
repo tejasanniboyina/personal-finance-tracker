@@ -1,15 +1,11 @@
 package com.teja;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExpenseManager {
 
-    private List<Expense> expensesList = new ArrayList<>();
 
     private int nextId  = 1;
 
@@ -27,33 +23,62 @@ public class ExpenseManager {
             statement.setString(3, expense.getDescription());
             statement.setDate(4, Date.valueOf(expense.getDate()));
 
-            statement.executeUpdate();
+           int rowsAffected = statement.executeUpdate();
+           if(rowsAffected > 0){
+               System.out.println("Expense added successfully!");
+           }
         } catch(SQLException e){
         e.printStackTrace();
         }
 
     }
 
-    void viewExpense() {
-        if (expensesList.isEmpty()) {
-            System.out.println("No Expenses Found....");
-        } else {
-            for (Expense expense : expensesList) {
-                System.out.println(expense);
-            }
-        }
+    List<Expense> viewExpense() {
+        List<Expense> expensesList = new ArrayList<>();
+        String sql = "SELECT * FROM expenses";
+       try(
+               Connection connection = DatabaseConnection.getConnection();
+               PreparedStatement statement = connection.prepareStatement(sql);
+               ){
+           ResultSet resultSet = statement.executeQuery();
+           while(resultSet.next()){
+              Expense expense = new Expense(
+                      resultSet.getDouble("amount"),
+               resultSet.getString("category"),
+               resultSet.getString("description"),
+               resultSet.getDate("date").toLocalDate()
+               );
+               expensesList.add(expense);
+           }
+       }catch (SQLException e){
+           e.printStackTrace();
+       }
+       return expensesList;
 
     }
 
-    boolean deleteExpense(int id) {
+    void deleteExpense(int id) {
 
-        for (int i = 0; i < expensesList.size(); i++) {
-            if (expensesList.get(i).getId() == id) {
-                expensesList.remove(i);
-                return true;
-            }
-        }
-        return false;
+         final String sql = "DELETE FROM expenses WHERE id = ?";
+
+         try(
+                 Connection connection =  DatabaseConnection.getConnection();
+                 PreparedStatement statement = connection.prepareStatement(sql);
+                 ){
+
+             statement.setInt(1,id);
+             int rowsAffected = statement.executeUpdate();
+
+             if(rowsAffected>0){
+                 System.out.println("Expense Deleted Successfully!!");
+             }else{
+                 System.out.println("ID not found!!");
+             }
+         }catch(SQLException e){
+             e.printStackTrace();
+
+         }
+
     }
 
     double calculateTotalExpenses() {
