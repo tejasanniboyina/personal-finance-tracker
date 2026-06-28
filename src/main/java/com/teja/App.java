@@ -1,5 +1,7 @@
 package com.teja;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
@@ -9,6 +11,15 @@ public class App {
     static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
+
+
+
+        try{
+            Connection connection = DatabaseConnection.getConnection();
+            System.out.println("Connected Successfully");
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
 
         ExpenseManager manager = new ExpenseManager();
 
