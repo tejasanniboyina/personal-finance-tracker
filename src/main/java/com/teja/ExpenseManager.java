@@ -1,5 +1,9 @@
 package com.teja;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,10 +14,17 @@ public class ExpenseManager {
     private int nextId  = 1;
 
     //ADD EXPENSE
-    void addExpense(Expense expense) {
-        expense.setId(nextId);
-        nextId++;
-        expensesList.add(expense);
+    void addExpense(Expense expense) throws SQLException {
+        String sql = "INSERT INTO expenses(amount,category,description,date) values(?,?,?,?)";
+
+        PreparedStatement statement = DatabaseConnection.getConnection().prepareStatement(sql);
+
+        statement.setDouble(1,expense.getAmount());
+        statement.setString(2,expense.getCategory());
+        statement.setString(3,expense.getDescription());
+        statement.setDate(4, Date.valueOf(expense.getDate()));
+
+        statement.executeUpdate();
 
     }
 

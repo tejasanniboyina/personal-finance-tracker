@@ -2,6 +2,7 @@ package com.teja;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
@@ -14,5 +15,8 @@ public class DatabaseConnection {
         return DriverManager.getConnection(URL,USERNAME,PASSWORD);
 
     }
+
+
+
 
 }
