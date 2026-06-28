@@ -76,42 +76,75 @@ public class ExpenseManager {
              }
          }catch(SQLException e){
              e.printStackTrace();
-
          }
-
     }
 
     double calculateTotalExpenses() {
-
         double total = 0;
-        for (Expense expense1 : expensesList) {
-            total += expense1.getAmount();
+
+        final String sql = "SELECT SUM(amount) FROM expenses";
+        try(
+                Connection connection =  DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+                ){
+           ResultSet resultSet = statement.executeQuery();
+           while ((resultSet.next())){
+              total =  resultSet.getDouble(1);
+           }
+           System.out.println("The Total Expense is "+total);
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return total;
     }
 
     List<Expense> searchByCategory(String category) {
+
         List<Expense> matchingExpenses = new ArrayList<>();
 
-        for (Expense expense : expensesList) {
-            if (expense.getCategory().equalsIgnoreCase(category)) {
+
+        final String sql = "SELECT * FROM expenses WHERE category = ?";
+        try(
+                Connection connection =  DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ){
+            statement.setString(1,category);
+            ResultSet resultSet =  statement.executeQuery();
+            while(resultSet.next()){
+                Expense expense = new Expense(
+                        resultSet.getInt("id"),
+                        resultSet.getDouble("amount"),
+                        resultSet.getString("category"),
+                        resultSet.getString("description"),
+                        resultSet.getDate("date").toLocalDate()
+                );
                 matchingExpenses.add(expense);
             }
+        }catch (SQLException e){
+            e.printStackTrace();
         }
         return matchingExpenses;
     }
 
     boolean updateExpense(Expense updatedExpense){
-        for(Expense expense:expensesList){
-            if(updatedExpense.getId()==expense.getId()){
-                expense.setAmount(updatedExpense.getAmount());
-                expense.setCategory(updatedExpense.getCategory());
-                expense.setDescription(updatedExpense.getDescription());
-                expense.setDate(updatedExpense.getDate());
-                return true;
-            }
+        final String sql = "UPDATE expenses SET amount=?, category=?, description=?, date=?  WHERE id = ?";
+        try(
+                Connection connection =  DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql);
+        ){
+            statement.setDouble(1,updatedExpense.getAmount());
+            statement.setString(2,updatedExpense.getCategory());
+            statement.setString(3,updatedExpense.getDescription());
+            statement.setDate(4,Date.valueOf(updatedExpense.getDate()));
+            statement.setInt(5,updatedExpense.getId());
 
+            int rowsAffected = statement.executeUpdate();
+            if(rowsAffected > 0) return true;
+
+        }catch (SQLException e){
+            e.printStackTrace();
         }
+
         return false;
     }
 }
