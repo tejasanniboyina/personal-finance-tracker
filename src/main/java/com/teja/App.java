@@ -24,6 +24,8 @@ public class App {
         ExpenseManager manager = new ExpenseManager();
 
         while (true) {
+            System.out.println();
+            System.out.println("---------------------------------------------------");
             System.out.println("Please select an option.");
             System.out.println("1.Add Expense");
             System.out.println("2.View Expenses");
@@ -41,18 +43,25 @@ public class App {
                     manager.addExpense(enterExpenses());
                     break;
                 case 2:
-                    manager.viewExpense();
+                    List<Expense> expenses = manager.viewExpense();
+                    if(expenses.isEmpty()){
+                        System.out.println("---->Expenses are empty!!!!!");
+                    }else {
+                        for (Expense expense : expenses) {
+                            System.out.println(expense);
+                        }
+                    }
                     break;
                 case 3:
-                    System.out.print("Enter the ID of Expense to be Deleted: ");
+                    System.out.print("---->Enter the ID of Expense to be Deleted: ");
                     int id = scanner.nextInt();
                     scanner.nextLine();
                     if (manager.deleteExpense(id)) {
-                        System.out.println("Expense with id:" + id + " has been deleted successfully.");
+                        System.out.println("---->Expense with id:" + id + " has been deleted successfully.");
                     } else {
-                        System.out.println("Expense with ID: " + id + " is not found.");
+                        System.out.println("---->Expense with ID: " + id + " is not found.");
                     }
-                    System.out.println("The remaining Expenses are : ");
+                    System.out.println("---->The remaining Expenses are : ");
                     manager.viewExpense();
                     break;
                 case 4:

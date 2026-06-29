@@ -57,7 +57,7 @@ public class ExpenseManager {
 
     }
 
-    void deleteExpense(int id) {
+    boolean deleteExpense(int id) {
 
          final String sql = "DELETE FROM expenses WHERE id = ?";
 
@@ -70,13 +70,12 @@ public class ExpenseManager {
              int rowsAffected = statement.executeUpdate();
 
              if(rowsAffected>0){
-                 System.out.println("Expense Deleted Successfully!!");
-             }else{
-                 System.out.println("ID not found!!");
+                 return true;
              }
          }catch(SQLException e){
              e.printStackTrace();
          }
+         return false;
     }
 
     double calculateTotalExpenses() {
@@ -91,7 +90,6 @@ public class ExpenseManager {
            while ((resultSet.next())){
               total =  resultSet.getDouble(1);
            }
-           System.out.println("The Total Expense is "+total);
         }catch (SQLException e){
             e.printStackTrace();
         }
