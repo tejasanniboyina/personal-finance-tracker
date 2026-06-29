@@ -103,7 +103,7 @@ public class ExpenseManager {
         List<Expense> matchingExpenses = new ArrayList<>();
 
 
-        final String sql = "SELECT * FROM expenses WHERE category = ?";
+        final String sql = "SELECT * FROM expenses WHERE LOWER(category) = LOWER(?)";
         try(
                 Connection connection =  DatabaseConnection.getConnection();
                 PreparedStatement statement = connection.prepareStatement(sql);

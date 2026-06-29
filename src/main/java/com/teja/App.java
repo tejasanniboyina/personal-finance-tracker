@@ -66,7 +66,6 @@ public class App {
                     List<Expense> result = manager.searchByCategory(category);
                     if (result.isEmpty()) {
                         System.out.println("No Matches Found...");
-
                     } else {
                         for (Expense expense : result) {
                             System.out.println(expense);
